@@ -11,3 +11,5 @@ sudo chown cloudera:cloudera /var/ufc/work
 
 sudo mkdir /var/log/ufc
 sudo chown cloudera:cloudera /var/log/ufc
+
+crontab cronfile
