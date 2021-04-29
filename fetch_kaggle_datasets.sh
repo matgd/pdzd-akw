@@ -83,14 +83,16 @@ if [[ -f "${TARGET_DIR_1}/${DATASET_CSV_1}.old" && -f "${TARGET_DIR_2}/${DATASET
     cd "${TARGET_DIR_1}"
     if [[ -f $"{DATASET_CSV_1}.old" ]]; then
         echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_1} and ${DATASET_CSV_1}.old" >> "${LOGFILE}"
-        grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_1}") "${DATASET_CSV_1}".old > "${DATASET_CSV_1}".diff
+        echo ${HEAD_1} > "${DATASET_CSV_1}".diff
+        grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_1}") "${DATASET_CSV_1}".old >> "${DATASET_CSV_1}".diff
     fi
     cd -
 
     cd "${TARGET_DIR_2}"
     if [[ -f $"{DATASET_CSV_2}.old" ]]; then
         echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_2} and ${DATASET_CSV_2}.old" >> "${LOGFILE}"
-        grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_2}") "${DATASET_CSV_2}".old > "${DATASET_CSV_2}".diff
+        echo ${HEAD_2} > "${DATASET_CSV_2}".diff
+        grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_2}") "${DATASET_CSV_2}".old >> "${DATASET_CSV_2}".diff
     fi
     cd -
 else
