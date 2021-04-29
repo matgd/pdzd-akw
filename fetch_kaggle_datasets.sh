@@ -32,8 +32,6 @@ function downloadSet() {
         printf "[$(date)] KAGGLE: " >> ${LOGFILE}
         if kaggle datasets download "${1}" -p "${2}" >> "${LOGFILE}"; then
             return 0
-            
-            # grep -v -F -f <(sed 's/^[*[:space:]]*//' test_case_summary.csv) test_case_list.csv > diff.csv
         fi
         echo "[$(date)] INFO: Attempt ${i} failed, retry in ${SLEEP_TIME} seconds..." >> "${LOGFILE}"
         sleep ${SLEEP_TIME}
