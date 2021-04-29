@@ -12,7 +12,7 @@
 #   5 - mismatched headers of new file and old from $1
 
 RETRIES=3
-LOGFILE=/var/log/ufc/processing-$(date "+%Y-%M-%d").log
+LOGFILE=/var/log/ufc/processing-$(date "+%Y-%m-%d").log
 SLEEP_TIME=60
 TARGET_DIR_1="${1}"
 TARGET_DIR_2="${2}"
@@ -42,7 +42,7 @@ function downloadSet() {
     return 1
 }
 
-echo "[$(date)] INFO: Finished script." >> "${LOGFILE}"
+echo "[$(date)] INFO: Finished download." >> "${LOGFILE}"
 
 downloadSet rajeevw/ufcdata "${TARGET_DIR_1}"
 FIRST_RESULT=$?
@@ -58,50 +58,56 @@ fi
 ### UNZIP FILES ###
 
 cd ${TARGET_DIR_1}
-unzip "${DATASET_CSV_1/csv/zip}"
+unzip -o ufcdata.zip
+mv data.csv "${DATASET_CSV_1}"
 cd -
 
 cd ${TARGET_DIR_2}
-unzip "${DATASET_CSV_2/csv/zip}"
+unzip -o ufc-fight-dataset.zip
+mv ufc_stats.csv "${DATASET_CSV_2}"
 cd -
 
-### VALIDATE HEADERS ###
+if [[ -f "${TARGET_DIR_1}/${DATASET_CSV_1}.old" && -f "${TARGET_DIR_2}/${DATASET_CSV_2}.old" ]]; then
 
-HEAD_1=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}")
-HEAD_1_OLD=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}.old")
-HEAD_2=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}")
-HEAD_2_OLD=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}.old")
+    ### VALIDATE HEADERS ###
 
-[[ "${HEAD_1}" == "${HEAD_1_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${HEAD_1} - ${HEAD_1_OLD}" >> "${LOGFILE}"; exit 4)
-[[ "${HEAD_2}" == "${HEAD_2_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${HEAD_2} - ${HEAD_2_OLD}" >> "${LOGFILE}"; exit 5)
+    HEAD_1=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}")
+    HEAD_1_OLD=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}.old")
+    HEAD_2=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}")
+    HEAD_2_OLD=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}.old")
+
+    [[ "${HEAD_1}" == "${HEAD_1_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_1} - ${DATASET_CSV_1}.old" >> "${LOGFILE}"; exit 4)
+    [[ "${HEAD_2}" == "${HEAD_2_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_2} - ${DATASET_CSV_2}.old" >> "${LOGFILE}"; exit 5)
 
 
-### GET DIFFERENCE TO NEW FILE ###
+    ### GET DIFFERENCE TO NEW FILE ###
 
-cd "${TARGET_DIR_1}"
-if [[ -f $"{DATASET_CSV_1}.old" ]]; then
-    echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_1} and ${DATASET_CSV_1}.old" >> "${LOGFILE}"
-    grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_1}") "${DATASET_CSV_1}".old > "${DATASET_CSV_1}".diff
+    cd "${TARGET_DIR_1}"
+    if [[ -f $"{DATASET_CSV_1}.old" ]]; then
+        echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_1} and ${DATASET_CSV_1}.old" >> "${LOGFILE}"
+        grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_1}") "${DATASET_CSV_1}".old > "${DATASET_CSV_1}".diff
+    fi
+    cd -
+
+    cd "${TARGET_DIR_2}"
+    if [[ -f $"{DATASET_CSV_2}.old" ]]; then
+        echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_2} and ${DATASET_CSV_2}.old" >> "${LOGFILE}"
+        grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_2}") "${DATASET_CSV_2}".old > "${DATASET_CSV_2}".diff
+    fi
+    cd -
+else
+    echo "[$(date)] INFO: Old files don't exist." >> "${LOGFILE}"
 fi
-cd -
-
-cd "${TARGET_DIR_2}"
-if [[ -f $"{DATASET_CSV_2}.old" ]]; then
-    echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_2} and ${DATASET_CSV_2}.old" >> "${LOGFILE}"
-    grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_2}") "${DATASET_CSV_2}".old > "${DATASET_CSV_2}".diff
-fi
-cd -
-
 
 ### MARKING FILES AS 'OLD' ONES
 
 echo "[$(date)] INFO: Marking files as old ones in ${TARGET_DIR_1}..." >> "${LOGFILE}"
-for f in "${TARGET_DIR_1}"*.csv; do
+for f in "${TARGET_DIR_1}/"*.csv; do
     cp "${f}" "${f}.old"
 done
 
 echo "[$(date)] INFO: Marking files as old ones in ${TARGET_DIR_2}..." >> "${LOGFILE}"
-for f in "${TARGET_DIR_2}"*.csv; do
+for f in "${TARGET_DIR_2}/"*.csv; do
     cp "${f}" "${f}.old"
 done
 
