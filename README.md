@@ -6,27 +6,14 @@
 kaggle
 ```
 
-### Get scripts
+### Get script and run
 ```bash
-wget https://raw.githubusercontent.com/matgd/pdzd-akw/master/fetch_kaggle_datasets.sh
-wget https://raw.githubusercontent.com/matgd/pdzd-akw/master/cronfile
-```
-
-### Create directories
-```bash
-sudo mkdir /var/ufc/work
-sudo chown cloudera:cloudera /var/ufc/work
-
-sudo mkdir /var/log/ufc
-sudo chown cloudera:cloudera /var/log/ufc
+wget https://raw.githubusercontent.com/matgd/pdzd-akw/master/setup.sh
+chmod +x setup.sh
+./setup.sh
 ```
 
 ### Test the script
 ```bash
 ./fetch_kaggle_datasets.sh "/var/ufc/work" "/var/ufc/work"
-```
-
-### Set the cron
-```bash
-crontab cronfile
 ```
