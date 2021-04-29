@@ -1,0 +1,1 @@
+0 20 * * * /home/cloudera/fetch_kaggle_datasets.sh "/var/ufc/work" "/var/ufc/work"
