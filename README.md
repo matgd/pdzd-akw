@@ -25,3 +25,8 @@ sudo chown cloudera:cloudera /var/log/ufc
 ```bash
 ./fetch_kaggle_datasets.sh "/var/ufc/work" "/var/ufc/work"
 ```
+
+### Set the cron
+```bash
+crontab cronfile
+```
