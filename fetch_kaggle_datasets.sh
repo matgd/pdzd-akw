@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Args:
+#   $1 - path to dir to place files in
+#
 # Error codes:
 #   1 - first dataset download failed
 #   2 - second dataset download failed
@@ -8,6 +11,7 @@
 RETRIES=3
 LOGFILE="/var/log/kaggle_fetch.log"
 SLEEP_TIME=60
+TARGET_DIR="${1}"
 
 echo "[$(date)] INFO: Trying to fetch data from kaggle..." >> "${LOGFILE}"
 
@@ -18,7 +22,7 @@ function downloadSet() {
     for i in $(seq ${RETRIES}); do
         echo "[$(date)] INFO: Attempt ${i}/${RETRIES} of fetching dataset ${1}..." >> "${LOGFILE}"
         printf "[$(date)] KAGGLE: " >> ${LOGFILE}
-        if kaggle datasets download "${1}" >> "${LOGFILE}"; then
+        if kaggle datasets download "${1}" -p "${TARGET_DIR}" >> "${LOGFILE}"; then
             return 0
         fi
         echo "[$(date)] INFO: Attempt ${i} failed, retry in ${SLEEP_TIME} seconds..." >> "${LOGFILE}"
@@ -30,9 +34,9 @@ function downloadSet() {
 
 echo "[$(date)] INFO: Finished script." >> "${LOGFILE}"
 
-downloadSet rajeevw/ufcdatas
+downloadSet rajeevw/ufcdata
 FIRST_RESULT=$?
-downloadSet theman90210/ufc-fight-datasets
+downloadSet theman90210/ufc-fight-dataset
 SECOND_RESULT=$?
 
 exit $((${FIRST_RESULT} + ${SECOND_RESULT} * 2))
