@@ -110,7 +110,7 @@ if [[ -f "${DATASET_CSV_1}.old" ]]; then
         echo "[$(date)] INFO: No changes in ${DATASET_CSV_1}" | tee -a "${LOGFILE}"
     fi
 else
-    echo "[$(date)] INFO: Old files doesn't exist." | tee -a "${LOGFILE}"
+    echo "[$(date)] INFO: Old file doesn't exist." | tee -a "${LOGFILE}"
     cp "${DATASET_CSV_1}" "${DATASET_CSV_1}".diff
     mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
 fi
