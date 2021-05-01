@@ -2,7 +2,7 @@
 
 # Args:
 #   $1 - path to dir to place files in (first dataset)
-#   $1 - path to dir to place files in (second dataset)
+#   $2 - path to dir to place files in (second dataset)
 #
 # Error codes:
 #   1 - first dataset download failed
@@ -67,53 +67,53 @@ cd -
 
 
 
-    ### VALIDATE HEADERS ###
+### VALIDATE HEADERS ###
 
-    HEAD_1=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}")
-    HEAD_1_OLD=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}.old")
-    HEAD_2=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}")
-    HEAD_2_OLD=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}.old")
+HEAD_1=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}")
+HEAD_1_OLD=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}.old")
+HEAD_2=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}")
+HEAD_2_OLD=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}.old")
 
-    [[ "${HEAD_1}" == "${HEAD_1_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_1} - ${DATASET_CSV_1}.old" >> "${LOGFILE}"; exit 4)
-    [[ "${HEAD_2}" == "${HEAD_2_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_2} - ${DATASET_CSV_2}.old" >> "${LOGFILE}"; exit 5)
+[[ "${HEAD_1}" == "${HEAD_1_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_1} - ${DATASET_CSV_1}.old" >> "${LOGFILE}"; exit 4)
+[[ "${HEAD_2}" == "${HEAD_2_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_2} - ${DATASET_CSV_2}.old" >> "${LOGFILE}"; exit 5)
 
 
-    ### GET DIFFERENCE TO NEW FILE ###
+### GET DIFFERENCE TO NEW FILE ###
 
-    cd "${TARGET_DIR_1}"
-    if [[ -f ${DATASET_CSV_1}.old ]]; then
-        echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_1} and ${DATASET_CSV_1}.old" >> "${LOGFILE}"
-        echo ${HEAD_1} > "${DATASET_CSV_1}".diff
-        grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_1}") "${DATASET_CSV_1}".old >> "${DATASET_CSV_1}".diff
-        if [[ $(wc -l ${DATASET_CSV_1}.diff) != "1" ]]; then
-            mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
-        else
-            echo "[$(date)] INFO: No changes in ${DATASET_CSV_1}" >> "${LOGFILE}"
-        fi
-    else
-        echo "[$(date)] INFO: Old files don't exist." >> "${LOGFILE}"
-        cp "${DATASET_CSV_1}" "${DATASET_CSV_1}".diff
+cd "${TARGET_DIR_1}"
+if [[ -f ${DATASET_CSV_1}.old ]]; then
+    echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_1} and ${DATASET_CSV_1}.old" >> "${LOGFILE}"
+    echo ${HEAD_1} > "${DATASET_CSV_1}".diff
+    grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_1}") "${DATASET_CSV_1}".old >> "${DATASET_CSV_1}".diff
+    if [[ $(wc -l ${DATASET_CSV_1}.diff) != "1" ]]; then
         mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
-    fi
-    cd -
-
-    cd "${TARGET_DIR_2}"
-    if [[ -f ${DATASET_CSV_2}.old ]]; then
-        echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_2} and ${DATASET_CSV_2}.old" >> "${LOGFILE}"
-        echo ${HEAD_2} > "${DATASET_CSV_2}".diff
-        grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_2}") "${DATASET_CSV_2}".old >> "${DATASET_CSV_2}".diff
-        if [[ $(wc -l ${DATASET_CSV_2}.diff) != "1" ]]; then
-            mv ${DATASET_CSV_2}.diff /var/ufc/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
-        else
-            echo "[$(date)] INFO: No changes in ${DATASET_CSV_2}" >> "${LOGFILE}"
-        fi
-    
     else
-        echo "[$(date)] INFO: Old file don't exist." >> "${LOGFILE}"
-        cp "${DATASET_CSV_2}" "${DATASET_CSV_2}".diff
-        mv ${DATASET_CSV_2}.diff /var/ufc/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
+        echo "[$(date)] INFO: No changes in ${DATASET_CSV_1}" >> "${LOGFILE}"
     fi
-    cd -
+else
+    echo "[$(date)] INFO: Old files don't exist." >> "${LOGFILE}"
+    cp "${DATASET_CSV_1}" "${DATASET_CSV_1}".diff
+    mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
+fi
+cd -
+
+cd "${TARGET_DIR_2}"
+if [[ -f ${DATASET_CSV_2}.old ]]; then
+    echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_2} and ${DATASET_CSV_2}.old" >> "${LOGFILE}"
+    echo ${HEAD_2} > "${DATASET_CSV_2}".diff
+    grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_2}") "${DATASET_CSV_2}".old >> "${DATASET_CSV_2}".diff
+    if [[ $(wc -l ${DATASET_CSV_2}.diff) != "1" ]]; then
+        mv ${DATASET_CSV_2}.diff /var/ufc/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
+    else
+        echo "[$(date)] INFO: No changes in ${DATASET_CSV_2}" >> "${LOGFILE}"
+    fi
+
+else
+    echo "[$(date)] INFO: Old file don't exist." >> "${LOGFILE}"
+    cp "${DATASET_CSV_2}" "${DATASET_CSV_2}".diff
+    mv ${DATASET_CSV_2}.diff /var/ufc/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
+fi
+cd -
 
     
 
