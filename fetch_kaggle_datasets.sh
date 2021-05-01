@@ -47,7 +47,7 @@ echo "[$(date)] INFO: Finished download." | tee "${LOGFILE}"
 
 downloadSet rajeevw/ufcdata "${TARGET_DIR_1}"
 FIRST_RESULT=$?
-downloadSet theman90210/ufc-fight-dataset | tee "${LOGFILE}"
+downloadSet theman90210/ufc-fight-dataset "${TARGET_DIR_2}"
 SECOND_RESULT=$?
 
 EXIT_CODE=$((${FIRST_RESULT} + ${SECOND_RESULT} * 2))
@@ -100,7 +100,7 @@ if [[ -f ${DATASET_CSV_1}.old ]]; then
         echo "[$(date)] INFO: No changes in ${DATASET_CSV_1}" | tee "${LOGFILE}"
     fi
 else
-    echo "[$(date)] INFO: Old files doesn't exist." >| tee "${LOGFILE}"
+    echo "[$(date)] INFO: Old files doesn't exist." | tee "${LOGFILE}"
     cp "${DATASET_CSV_1}" "${DATASET_CSV_1}".diff
     mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
 fi
