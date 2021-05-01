@@ -87,6 +87,8 @@ cd -
         grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_1}") "${DATASET_CSV_1}".old >> "${DATASET_CSV_1}".diff
         if [[ $(wc -l ${DATASET_CSV_1}.diff) != "1" ]]; then
             mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
+        else
+            echo "[$(date)] INFO: No changes in ${DATASET_CSV_1}" >> "${LOGFILE}"
         fi
     else
         echo "[$(date)] INFO: Old files don't exist." >> "${LOGFILE}"
@@ -102,6 +104,8 @@ cd -
         grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_2}") "${DATASET_CSV_2}".old >> "${DATASET_CSV_2}".diff
         if [[ $(wc -l ${DATASET_CSV_2}.diff) != "1" ]]; then
             mv ${DATASET_CSV_2}.diff /var/ufc/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
+        else
+            echo "[$(date)] INFO: No changes in ${DATASET_CSV_2}" >> "${LOGFILE}"
         fi
     
     else
