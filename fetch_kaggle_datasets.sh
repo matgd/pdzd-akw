@@ -85,6 +85,7 @@ if [[ -f "${TARGET_DIR_1}/${DATASET_CSV_1}.old" && -f "${TARGET_DIR_2}/${DATASET
         echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_1} and ${DATASET_CSV_1}.old" >> "${LOGFILE}"
         echo ${HEAD_1} > "${DATASET_CSV_1}".diff
         grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_1}") "${DATASET_CSV_1}".old >> "${DATASET_CSV_1}".diff
+        mv ${DATASET_CSV_1}.diff /var/ufc/work/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
     fi
     cd -
 
@@ -93,6 +94,7 @@ if [[ -f "${TARGET_DIR_1}/${DATASET_CSV_1}.old" && -f "${TARGET_DIR_2}/${DATASET
         echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_2} and ${DATASET_CSV_2}.old" >> "${LOGFILE}"
         echo ${HEAD_2} > "${DATASET_CSV_2}".diff
         grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_2}") "${DATASET_CSV_2}".old >> "${DATASET_CSV_2}".diff
+        mv ${DATASET_CSV_2}.diff /var/ufc/work/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
     fi
     cd -
 else
