@@ -74,10 +74,14 @@ HEAD_1_OLD=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}.old")
 HEAD_2=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}")
 HEAD_2_OLD=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}.old")
 
-[[ "${HEAD_1}" == "${HEAD_1_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_1} - ${DATASET_CSV_1}.old" >> "${LOGFILE}"; exit 4)
-[[ "${HEAD_2}" == "${HEAD_2_OLD}" ]] || (echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_2} - ${DATASET_CSV_2}.old" >> "${LOGFILE}"; exit 5)
-
-
+if [[ "${HEAD_1}" != "${HEAD_1_OLD}" ]]; then 
+    echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_1} - ${DATASET_CSV_1}.old" >> "${LOGFILE}"
+    exit 4
+fi
+if [[ "${HEAD_2}" != "${HEAD_2_OLD}" ]]; then 
+    echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_2} - ${DATASET_CSV_2}.old" >> "${LOGFILE}"
+    exit 5
+fi
 ### GET DIFFERENCE TO NEW FILE ###
 
 cd "${TARGET_DIR_1}"
