@@ -30,7 +30,7 @@ function downloadSet() {
     for i in $(seq ${RETRIES}); do
         echo "[$(date)] INFO: Attempt ${i}/${RETRIES} of fetching dataset ${1}..." >> "${LOGFILE}"
         printf "[$(date)] KAGGLE: " >> ${LOGFILE}
-        if kaggle datasets download "${1}" -p "${2}" >> "${LOGFILE}"; then
+        if /home/cloudera/.local/bin/kaggle datasets download "${1}" -p "${2}" >> "${LOGFILE}"; then
             return 0
         fi
         echo "[$(date)] INFO: Attempt ${i} failed, retry in ${SLEEP_TIME} seconds..." >> "${LOGFILE}"
