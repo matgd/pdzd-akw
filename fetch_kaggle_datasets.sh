@@ -98,7 +98,7 @@ if [[ -f ${DATASET_CSV_1}.old ]]; then
         echo "[$(date)] INFO: No changes in ${DATASET_CSV_1}" >> "${LOGFILE}"
     fi
 else
-    echo "[$(date)] INFO: Old files don't exist." >> "${LOGFILE}"
+    echo "[$(date)] INFO: Old files doesn't exist." >> "${LOGFILE}"
     cp "${DATASET_CSV_1}" "${DATASET_CSV_1}".diff
     mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
 fi
@@ -116,7 +116,7 @@ if [[ -f ${DATASET_CSV_2}.old ]]; then
     fi
 
 else
-    echo "[$(date)] INFO: Old file don't exist." >> "${LOGFILE}"
+    echo "[$(date)] INFO: Old file doesn't exist." >> "${LOGFILE}"
     cp "${DATASET_CSV_2}" "${DATASET_CSV_2}".diff
     mv ${DATASET_CSV_2}.diff /var/ufc/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
 fi
