@@ -77,7 +77,7 @@ HEAD_1_OLD=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}.old")
 HEAD_2=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}")
 HEAD_2_OLD=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}.old")
 
-if [[ -f "${DATASET_CSV_1}.old" ]]; then
+if [[ -f ${TARGET_DIR_1}/"${DATASET_CSV_1}.old" ]]; then
     if [[ "${HEAD_1}" != "${HEAD_1_OLD}" ]]; then 
         echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_1} - ${DATASET_CSV_1}.old" | tee -a "${LOGFILE}"
         echo "[$(date)] ################### ENDING SCRIPT ###################" | tee -a "${LOGFILE}"
@@ -85,7 +85,7 @@ if [[ -f "${DATASET_CSV_1}.old" ]]; then
     fi
 fi
 
-if [[ -f "${DATASET_CSV_2}.old" ]]; then
+if [[ -f "${TARGET_DIR_2}/${DATASET_CSV_2}.old" ]]; then
     if [[ "${HEAD_2}" != "${HEAD_2_OLD}" ]]; then 
         echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_2} - ${DATASET_CSV_2}.old" | tee -a "${LOGFILE}"
         echo "[$(date)] ################### ENDING SCRIPT ###################" | tee -a "${LOGFILE}"
