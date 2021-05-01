@@ -65,7 +65,7 @@ unzip -o ufc-fight-dataset.zip
 mv ufc_stats.csv "${DATASET_CSV_2}"
 cd -
 
-if [[ -f "${TARGET_DIR_1}/${DATASET_CSV_1}.old" && -f "${TARGET_DIR_2}/${DATASET_CSV_2}.old" ]]; then
+
 
     ### VALIDATE HEADERS ###
 
@@ -87,6 +87,7 @@ if [[ -f "${TARGET_DIR_1}/${DATASET_CSV_1}.old" && -f "${TARGET_DIR_2}/${DATASET
         grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_1}") "${DATASET_CSV_1}".old >> "${DATASET_CSV_1}".diff
         mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
     else
+        echo "[$(date)] INFO: Old files don't exist." >> "${LOGFILE}"
         cp "${DATASET_CSV_1}" "${DATASET_CSV_1}".diff
         mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
     fi
@@ -99,13 +100,14 @@ if [[ -f "${TARGET_DIR_1}/${DATASET_CSV_1}.old" && -f "${TARGET_DIR_2}/${DATASET
         grep -v -F -f <(sed 's/^[*[:space:]]*//' "${DATASET_CSV_2}") "${DATASET_CSV_2}".old >> "${DATASET_CSV_2}".diff
         mv ${DATASET_CSV_2}.diff /var/ufc/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
     else
+        echo "[$(date)] INFO: Old file don't exist." >> "${LOGFILE}"
         cp "${DATASET_CSV_2}" "${DATASET_CSV_2}".diff
         mv ${DATASET_CSV_2}.diff /var/ufc/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
     fi
     cd -
-else
-    echo "[$(date)] INFO: Old files don't exist." >> "${LOGFILE}"
-fi
+
+    
+
 
 ### MARKING FILES AS 'OLD' ONES
 
