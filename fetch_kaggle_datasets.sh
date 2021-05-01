@@ -9,7 +9,7 @@
 #   2 - second dataset download failed
 #   3 - both datasets download failed
 #   4 - mismatched headers of new file and old from $1
-#   5 - mismatched headers of new file and old from $1
+#   5 - mismatched headers of new file and old from $2
 
 RETRIES=3
 LOGFILE=/var/log/ufc/processing-$(date "+%Y-%m-%d").log
