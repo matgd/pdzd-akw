@@ -73,12 +73,11 @@ cd -
 ### VALIDATE HEADERS ###
 
 HEAD_1=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}")
-HEAD_1_OLD=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}.old")
 HEAD_2=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}")
-HEAD_2_OLD=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}.old")
 
 cd ${TARGET_DIR_1}
 if [[ -f "${DATASET_CSV_1}.old" ]]; then
+    HEAD_1_OLD=$(head -n 1 "${TARGET_DIR_1}/${DATASET_CSV_1}.old")
     if [[ "${HEAD_1}" != "${HEAD_1_OLD}" ]]; then 
         echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_1} - ${DATASET_CSV_1}.old" | tee -a "${LOGFILE}"
         echo "[$(date)] ################### ENDING SCRIPT ###################" | tee -a "${LOGFILE}"
@@ -89,6 +88,7 @@ cd -
 
 cd ${TARGET_DIR_2}
 if [[ -f "${DATASET_CSV_2}.old" ]]; then
+    HEAD_2_OLD=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}.old")
     if [[ "${HEAD_2}" != "${HEAD_2_OLD}" ]]; then 
         echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_2} - ${DATASET_CSV_2}.old" | tee -a "${LOGFILE}"
         echo "[$(date)] ################### ENDING SCRIPT ###################" | tee -a "${LOGFILE}"
