@@ -20,6 +20,7 @@ TARGET_DIR_2="${2}"
 DATASET_CSV_1="ufcdata.csv"
 DATASET_CSV_2="ufc-fight-dataset.csv"
 
+echo "[$(date)] ################### STARTING SCRIPT ###################" >> "${LOGFILE}"
 echo "[$(date)] INFO: Trying to fetch data from kaggle..." >> "${LOGFILE}"
 
 function downloadSet() {
@@ -76,10 +77,12 @@ HEAD_2_OLD=$(head -n 1 "${TARGET_DIR_2}/${DATASET_CSV_2}.old")
 
 if [[ "${HEAD_1}" != "${HEAD_1_OLD}" ]]; then 
     echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_1} - ${DATASET_CSV_1}.old" >> "${LOGFILE}"
+    echo "[$(date)] ################### ENDING SCRIPT ###################" >> "${LOGFILE}"
     exit 4
 fi
 if [[ "${HEAD_2}" != "${HEAD_2_OLD}" ]]; then 
     echo "[$(date)] ERROR: Mismatched headers ${DATASET_CSV_2} - ${DATASET_CSV_2}.old" >> "${LOGFILE}"
+    echo "[$(date)] ################### ENDING SCRIPT ###################" >> "${LOGFILE}"
     exit 5
 fi
 ### GET DIFFERENCE TO NEW FILE ###
@@ -134,4 +137,5 @@ for f in "${TARGET_DIR_2}/"*.csv; do
     cp "${f}" "${f}.old"
 done
 
+echo "[$(date)] ################### ENDING SCRIPT ###################" >> "${LOGFILE}"
 exit 0
