@@ -103,7 +103,12 @@ cd "${TARGET_DIR_1}"
 if [[ -f "${DATASET_CSV_1}.old" ]]; then
     echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_1} and ${DATASET_CSV_1}.old" | tee -a "${LOGFILE}"
     echo ${HEAD_1} > ${DATASET_CSV_1}.diff
-    grep -v -F -f <(sed 's/^[*[:space:]]*//' ${DATASET_CSV_1}.old) ${DATASET_CSV_1} >> "${DATASET_CSV_1}".diff
+    # grep -v -F -f <(sed 's/^[*[:space:]]*//' ${DATASET_CSV_1}.old) ${DATASET_CSV_1} >> "${DATASET_CSV_1}".diff
+
+    old_lines_1=$(wc -l < ${DATASET_CSV_1}.old)
+    new_lines_1=$(wc -l < ${DATASET_CSV_1})
+    tail -n $(( $new_lines_1 - $old_lines_1 )) ${DATASET_CSV_1} >> ${DATASET_CSV_1}.diff
+
     if [[ $(wc -l < ${DATASET_CSV_1}.diff) != "1" ]]; then
         mv ${DATASET_CSV_1}.diff /var/ufc/sources/rajeevw_ufcdata/data-$(date "+%Y-%m-%d").csv
     else
@@ -120,7 +125,12 @@ cd "${TARGET_DIR_2}"
 if [[ -f "${DATASET_CSV_2}.old" ]]; then
     echo "[$(date)] INFO: Getting diff of ${DATASET_CSV_2} and ${DATASET_CSV_2}.old" | tee -a "${LOGFILE}"
     echo ${HEAD_2} > ${DATASET_CSV_2}.diff
-    grep -v -F -f <(sed 's/^[*[:space:]]*//' ${DATASET_CSV_2}.old) ${DATASET_CSV_2} >> "${DATASET_CSV_2}".diff
+
+    old_lines_2=$(wc -l < ${DATASET_CSV_2}.old)
+    new_lines_2=$(wc -l < ${DATASET_CSV_2})
+    tail -n $(( $new_lines_2 - $old_lines_2 )) ${DATASET_CSV_2} >> ${DATASET_CSV_2}.diff
+
+    # grep -v -F -f <(sed 's/^[*[:space:]]*//' ${DATASET_CSV_2}.old) ${DATASET_CSV_2} >> "${DATASET_CSV_2}".diff
     if [[ $(wc -l < ${DATASET_CSV_2}.diff) != "1" ]]; then
         mv ${DATASET_CSV_2}.diff /var/ufc/sources/theman90210_ufc-fight-dataset/data-$(date "+%Y-%m-%d").csv
     else
